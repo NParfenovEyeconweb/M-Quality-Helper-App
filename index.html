@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Simple web application that helps with gathering
+    stats on JSON exported telegram chats.">
+    <meta name="author" content="Nikita Parfenov">
+    <title>MQuality Helper App</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="root">
+        <header class="main-header">
+            <div class="leftH">
+                <img class="app-logo" src="resources/logo.png" alt="App logo">
+                <div class="app-name">
+                    <div class="company-name-svg-wrapper">
+                        <object class="company-name-svg" data="resources/main_logo_PP.svg"
+                            type="image/svg+xml"></object>
+                    </div>
+                    <h1 class="app-name-text">M-Quality Helper App</h1>
+                </div>
+
+            </div>
+            <div class="rightH">
+                <div class="main-header-button-wrapper">
+                    <button id="reset-button" class="main-header-button" type="button">Очистить всё</button>
+                </div>
+                <div class="main-header-select-wrapper">
+                    <select id="script-select" class="script-select" name="script-select">
+                        <option class="script-select-option" value="count-messages">Подсчет сообщений</option>
+                        <option class="script-select-option" value="count-reactions">Подсчет реакций</option>
+                        <option class="script-select-option" value="count-keywords">Подсчет сообщений с ключевыми
+                            словами
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+        </header>
+        <div class="main-body">
+            <div class="main-form">
+                <header class="form-block" class="form-header">
+                    <h2 id="script-name" class="script-name">Подсчет сообщений</h2>
+                </header>
+                <div class="form-block" class="form-message-type">
+                    <h3 class="form-block-name">Сообщения для подсчета:</h3>
+                    <div class="form-block-description">
+                        Сообщения для подсчета необходимо вводить полностью! <br>Например,
+                        для подсчета сообщений "завершено" нужно ввести это слово полностью.
+                        Сообщения "завершен" или "завершен, спасибо!" при этом в подсчете
+                        участвовать не будут.
+                    </div>
+                    <div id="message-input-wrapper" class="form-message-input-wrapper">
+                        <input class="form-input" type="text" name="message-text" placeholder="Введите сообщение">
+                    </div>
+                    <div class="form-message-button-wrapper">
+                        <button id="add-message-button" class="form-button" type="button">+</button>
+                        <button id="delete-message-button" class="form-button" type="button">-</button>
+                    </div>
+                </div>
+                <div class="form-block" class="form-timespan">
+                    <h3 class="form-block-name">Период анализа сообщений: </h3>
+                    <div class="form-date-input-wrapper">
+                        <input id="start-date-input" class="form-input" type="text" name="start-date"
+                            placeholder="Введите стартовую дату">
+                    </div>
+                    <div class="form-date-input-wrapper">
+                        <input id="end-date-input" class="form-input" type="text" name="end-date"
+                            placeholder="Введите конечную дату">
+                    </div>
+                </div>
+                <div class="form-block" class="form-file-selection">
+                    <h3 class="form-block-name">Файл для анализа: </h3>
+                    <div class="form-file-input-wrapper">
+                        <form class="form-file-upload" action="/upload" method="post" enctype="multipart/form-data">
+                            <label for="file-input">Выберите файл c JSON выгрузкой:</label>
+                            <div class="file-input-wrapper">
+                                <input id="file-input" class="file-input" type="file" name="userfile">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="form-block" class="form-start-script">
+                    <h3 class="form-block-name">Запустить программу </h3>
+                    <button id="start-script-button" class="form-button"
+                        class="form-start-script-button">Запустить</button>
+                </div>
+            </div>
+        </div>
+        <footer class="main-footer">
+            footer
+        </footer>
+        <script src="scripts/main.js"></script>
+    </div>
+</body>
+
+</html>

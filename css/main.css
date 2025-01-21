@@ -1,0 +1,142 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: "Roboto", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+}
+
+/* header styles*/
+
+.main-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background-color: black;
+  padding: 8px 15px;
+  width: 100%;
+  height: min-content;
+  color: white;
+}
+
+.leftH {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  width: 100%;
+  height: min-content;
+}
+
+/* app logo background color: PaleGreen ( #98FB98 )*/
+.app-logo {
+  height: 110px;
+  border-radius: 12px;
+}
+
+.app-name {
+  display: flex;
+  flex-direction: column;
+  justify-items: flex-start;
+  align-items: center;
+  width: 200px;
+  height: min-content;
+}
+
+.company-name-svg-wrapper {
+  width: 100%;
+}
+
+.app-name-text {
+  font-size: 28px;
+}
+
+.rightH {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  margin: 40px 0px;
+}
+
+.main-header-button-wrapper {
+  height: 100%;
+}
+
+.main-header-select-wrapper {
+  height: 100%;
+}
+
+.script-select,
+.main-header-button {
+  height: 100%;
+}
+
+/* form styles */
+
+.form-block {
+  background-color: #aa98fa;
+  border-radius: 12px;
+  margin: 5px 10px;
+  padding: 7px 12px;
+}
+
+.form-button {
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.form-block-description {
+  font-weight: 300;
+  font-size: 14px;
+}
+
+.form-message-input-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.form-message-button-wrapper {
+  margin-top: 4px;
+}
+
+.form-input {
+  border: 1px black solid;
+  border-radius: 5px;
+  padding: 2px 4px;
+}
+
+.form-file-input-wrapper {
+  max-width: 300px;
+}
+
+.form-file-upload {
+  display: flex;
+  flex-direction: column;
+}
+
+.file-input {
+  height: 80px;
+  border: 2px solid black;
+}
+
+/* footer styles */
+
+.main-footer {
+  background-color: black;
+  color: white;
+  padding: 5px 10px;
+}
