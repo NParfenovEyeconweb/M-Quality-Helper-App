@@ -24,19 +24,17 @@ startScriptButton.addEventListener("click", () => {
   console.log(`endDateValue = ${endDateValue}`);
 
   const fileInput = document.getElementById("file-input");
-  const file = fileInput.files;
+  const files = fileInput.files;
 
-  if (file.length > 1) {
-    alert("Ошибка добавления файла. Пожалуйста, выберите только 1 файл.");
-    console(`file input error: more than 1 file selected`);
+  if (files.length != 1) {
+    alert(
+      "Ошибка добавления файла. Пожалуйста, убедитесь, что вы добавили файл."
+    );
+    console.log(`file input error`);
     return;
   }
 
-  if (!file) {
-    alert("Ошибка добавления файла. Пожалуйста, попробуйте еще раз.");
-    console("file input error: null");
-    return;
-  }
+  const file = files[0];
 
   const fileName = file.name;
   const fileExtension = fileName.split(".").pop();
@@ -47,6 +45,13 @@ startScriptButton.addEventListener("click", () => {
   if (scriptTypeValue === "" || startDateValue === "" || endDateValue === "") {
     alert("Ошибка! Заполнены не все обязательные поля ввода.");
     console.log("data input error: some values are missing");
+  }
+
+  if (!isDateString(startDateValue) || isDateString(endDateValue)) {
+    alert(
+      "Ошибка считывания даты. Пожалуйста, убедитесь, что дата указана в корректном формате."
+    );
+    console.log("date parse error");
   }
 
   if (scriptTypeValue === "Подсчет сообщений") {
