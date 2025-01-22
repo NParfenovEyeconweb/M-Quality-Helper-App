@@ -1,6 +1,6 @@
 /*
 function that returns boolean value
-it returns true if the given string is a correct dateString value
+it returns Date object if the given string is a correct dateString value
 and false if it's not
 correct dateStrings examples: 2025-01-25 00:00, 1984-01-01, 2024/12/31 23:59
 */
@@ -13,6 +13,9 @@ function isDateString(str) {
     return false;
   }
 
+  let hours = undefined;
+  let minutes = undefined;
+
   if (strSplitHalf.length === 2) {
     const time = strSplitHalf[1];
     const timeRegex = /\d{2}:\d{2}/;
@@ -21,8 +24,8 @@ function isDateString(str) {
       return false;
     }
 
-    let hours = Number(time.split(":")[0]);
-    let minutes = Number(time.split(":")[1]);
+    hours = Number(time.split(":")[0]);
+    minutes = Number(time.split(":")[1]);
     if (hours === undefined || minutes === undefined) {
       return false;
     }
@@ -54,7 +57,7 @@ function isDateString(str) {
         days >= 1 &&
         days <= 31
       ) {
-        return true;
+        return new Date(years, months-1, days, hours ?? 0, minutes ?? 0);
       }
     }
   }
@@ -64,3 +67,4 @@ function isDateString(str) {
 function createDateRegex(separator) {
   return RegExp(`\\d{4}${separator}\\d{2}${separator}\\d{2}`);
 }
+

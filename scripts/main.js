@@ -13,7 +13,7 @@ startScriptButton.addEventListener("click", () => {
   console.log(`targetMessages succesfully retrieved: ${targetMessages}`);
 
   const scriptTypeElement = document.getElementById("script-name");
-  const scriptTypeValue = scriptTypeElement.value;
+  const scriptTypeValue = scriptTypeElement.textContent;
 
   const startDateInput = document.getElementById("start-date-input");
   const startDateValue = startDateInput.value;
@@ -40,22 +40,33 @@ startScriptButton.addEventListener("click", () => {
   const fileExtension = fileName.split(".").pop();
   if (fileExtension.toLowerCase() !== "json") {
     alert("Ошибка добавления файла. Расширение файла не .json");
+    return;
   }
 
   if (scriptTypeValue === "" || startDateValue === "" || endDateValue === "") {
     alert("Ошибка! Заполнены не все обязательные поля ввода.");
     console.log("data input error: some values are missing");
+    return;
   }
 
-  if (!isDateString(startDateValue) || isDateString(endDateValue)) {
+  const startDate = isDateString(startDateValue);
+  const endDate = isDateString(endDateValue);
+
+  if (startDate === undefined || endDate === undefined) {
     alert(
       "Ошибка считывания даты. Пожалуйста, убедитесь, что дата указана в корректном формате."
     );
     console.log("date parse error");
+    return;
   }
 
   if (scriptTypeValue === "Подсчет сообщений") {
     console.log(`script type: ${scriptTypeValue}`);
+    const resultMap = countMessages(file, targetMessages, startDate, endDate);
+    const htmlMap = mapToHTMLTable(resultMap, "outputTable");
+    const outputBlock = document.getElementById("form-start-script-block");
+    const tableObject = htmlStringToObject(htmlMap);
+    outputBlock.appendChild(tableObject);
   }
 
   /* needed function is called with a file as an argument */
@@ -130,6 +141,63 @@ function for the first type of script that counts specific messages
 using json exported telegram chat
 */
 
-function countMessages(file, messages) {
-  return;
+function countMessages(file, targetMessages, startDate, endDate) {
+  const reader = new FileReader();
+
+  reader.onload = (event) => {
+    try {
+      const jsonData = JSON.parse(event.target.result);
+
+      const messages = jsonData.messages;
+      const usersMap = new Map();
+
+      console.log(messages.length);
+
+      for (const message of messages) {
+        const messageText = extractText(message).trim();
+        const messageAuthor = getAuthor(message).name;
+        const messageDate = getDate(message);
+
+        if (messageDate > startDate && messageDate < endDate) {
+          for (const targetMessage of targetMessages) {
+            if (messageText === targetMessage) {
+              if (!usersMap.has(messageAuthor)) {
+                usersMap.set(messageAuthor, 0);
+              }
+              usersMap.set(messageAuthor, usersMap.get(messageAuthor) + 1);
+              break;
+            }
+          }
+        }
+      }
+      
+      console.log(usersMap);
+
+    } catch (error) {
+      console.error('Error parsing JSON');
+    }
+  }
+
+  reader.readAsText(file);
+
+  return usersMap;
+}
+
+function mapToHTMLTable(map, tableId = 'mapTable') {
+  let html = `<table id="${tableId}" border="1" style="border-collapse: collapse; width: 100%;">`;
+  html += '<thead><tr><th>Key</th><th>Value</th></tr></thead>';
+  html += '<tbody>';
+
+  for (const [key, value] of map) {
+    html += `<tr><td>${key}</td><td>${value}</td></tr>`;
+  }
+
+  html += '</tbody></table>';
+  return html;
+}
+
+function htmlStringToObject(htmlString) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(htmlString, 'text/html');
+  return htmlToObject(doc.body); 
 }
