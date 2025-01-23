@@ -133,6 +133,32 @@ body {
   border: 2px solid black;
 }
 
+/* output table styles */
+
+#outputTable {
+  background-color: white;
+  border: 2px solid black;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#outputTable th {
+  background-color:  #2dbd2d;
+  color: white;
+  text-align: left;
+  padding: 12px 15px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  font-size: 14px;
+}
+
+#outputTable td {
+  padding: 4px 7px;
+  text-align: left;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+  font-size: 11px;
+}
+
 /* footer styles */
 
 .main-footer {

@@ -62,11 +62,27 @@ startScriptButton.addEventListener("click", () => {
 
   if (scriptTypeValue === "Подсчет сообщений") {
     console.log(`script type: ${scriptTypeValue}`);
-    const resultMap = countMessages(file, targetMessages, startDate, endDate);
-    const htmlMap = mapToHTMLTable(resultMap, "outputTable");
-    const outputBlock = document.getElementById("form-start-script-block");
-    const tableObject = htmlStringToObject(htmlMap);
-    outputBlock.appendChild(tableObject);
+    countMessages(file, targetMessages, startDate, endDate)
+      .then((resultMap) => {
+        const tableId = "outputTable";
+        const resultTableHtml = mapToHTMLTable(resultMap, tableId);
+        console.log(resultTableHtml);
+    
+        const resultBlock = document.getElementById("form-block-result");
+        const existingTable = document.getElementById(tableId); 
+    
+        if (existingTable) {
+          existingTable.remove()
+          console.log("Existing table removed");
+        }
+
+        resultBlock.innerHTML += resultTableHtml;
+      })
+      .catch((error) => {
+        console.log("Promise error", error);
+      });
+
+
   }
 
   /* needed function is called with a file as an argument */
@@ -142,62 +158,54 @@ using json exported telegram chat
 */
 
 function countMessages(file, targetMessages, startDate, endDate) {
-  const reader = new FileReader();
-
-  reader.onload = (event) => {
-    try {
-      const jsonData = JSON.parse(event.target.result);
-
-      const messages = jsonData.messages;
-      const usersMap = new Map();
-
-      console.log(messages.length);
-
-      for (const message of messages) {
-        const messageText = extractText(message).trim();
-        const messageAuthor = getAuthor(message).name;
-        const messageDate = getDate(message);
-
-        if (messageDate > startDate && messageDate < endDate) {
-          for (const targetMessage of targetMessages) {
-            if (messageText === targetMessage) {
-              if (!usersMap.has(messageAuthor)) {
-                usersMap.set(messageAuthor, 0);
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+  
+      reader.onload = (event) => {
+        try {
+          const jsonData = JSON.parse(event.target.result);
+          const usersMap = new Map();
+  
+          const messages = jsonData.messages;
+  
+          for (const message of messages) {
+            const messageText = extractText(message).trim();
+            const messageAuthor = getAuthor(message).name;
+            const messageDate = getDate(message);
+  
+            if (messageDate > startDate && messageDate < endDate) {
+              for (const targetMessage of targetMessages) {
+                if (messageText === targetMessage) {
+                  if (!usersMap.has(messageAuthor)) {
+                    usersMap.set(messageAuthor, 0);
+                  }
+                  usersMap.set(messageAuthor, usersMap.get(messageAuthor) + 1);
+                  break;
+                }
               }
-              usersMap.set(messageAuthor, usersMap.get(messageAuthor) + 1);
-              break;
             }
           }
+  
+          resolve(usersMap);
+        } catch (error) {
+          reject('Error parsing JSON');
         }
-      }
-      
-      console.log(usersMap);
-
-    } catch (error) {
-      console.error('Error parsing JSON');
-    }
-  }
-
-  reader.readAsText(file);
-
-  return usersMap;
+      };
+  
+      reader.onerror = () => reject('Error reading file');
+      reader.readAsText(file);
+  });
 }
 
 function mapToHTMLTable(map, tableId = 'mapTable') {
   let html = `<table id="${tableId}" border="1" style="border-collapse: collapse; width: 100%;">`;
-  html += '<thead><tr><th>Key</th><th>Value</th></tr></thead>';
+  html += '<thead><tr><th>Пользователь</th><th>Кол-во сообщений</th></tr></thead>';
   html += '<tbody>';
 
-  for (const [key, value] of map) {
+  map.forEach((value, key, map) => {
     html += `<tr><td>${key}</td><td>${value}</td></tr>`;
-  }
+  });
 
   html += '</tbody></table>';
   return html;
-}
-
-function htmlStringToObject(htmlString) {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(htmlString, 'text/html');
-  return htmlToObject(doc.body); 
 }
