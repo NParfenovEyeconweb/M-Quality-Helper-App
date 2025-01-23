@@ -16,11 +16,11 @@ startScriptButton.addEventListener("click", () => {
   const scriptTypeValue = scriptTypeElement.textContent;
 
   const startDateInput = document.getElementById("start-date-input");
-  const startDateValue = startDateInput.value;
+  const startDateValue = startDateInput.value.trim();
   console.log(`startDateValue = ${startDateValue}`);
 
   const endDateInput = document.getElementById("end-date-input");
-  const endDateValue = endDateInput.value;
+  const endDateValue = endDateInput.value.trim();
   console.log(`endDateValue = ${endDateValue}`);
 
   const fileInput = document.getElementById("file-input");
