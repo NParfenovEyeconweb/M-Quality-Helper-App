@@ -37,8 +37,8 @@
                     <select id="script-select" class="script-select" name="script-select">
                         <option class="script-select-option" value="count-messages">Подсчет сообщений</option>
                         <option class="script-select-option" value="count-reactions">Подсчет реакций</option>
-                        <option class="script-select-option" value="count-keywords">Подсчет сообщений с ключевыми
-                            словами
+                        <option class="script-select-option" value="count-keywords">Подсчет сообщений по ключевым
+                            словам
                         </option>
                     </select>
                 </div>
@@ -47,11 +47,13 @@
         </header>
         <div class="main-body">
             <div class="main-form">
-                <header class="form-block" class="form-header">
+                <header class="form-header">
                     <h2 id="script-name" class="script-name">Подсчет сообщений</h2>
                 </header>
                 <div class="form-block" class="form-message-type">
-                    <h3 class="form-block-name">Сообщения для подсчета:</h3>
+                    <div class="form-block-name">
+                        <h3 class="form-block-text">Сообщения для подсчета:</h3>
+                    </div>
                     <div class="form-block-description">
                         Сообщения для подсчета необходимо вводить полностью! <br>Например,
                         для подсчета сообщений "завершено" нужно ввести это слово полностью.
@@ -68,7 +70,9 @@
                     </div>
                 </div>
                 <div class="form-block" class="form-timespan">
-                    <h3 class="form-block-name">Период анализа сообщений: </h3>
+                    <div class="form-block-name">
+                        <h3 class="form-block-text">Период анализа сообщений: </h3>
+                    </div>
                     <div class="form-block-description">
                         Дату можно указывать в нескольких форматах, например: <br>
                         <b>ГГГГ.ММ.ДД ЧЧ:ММ</b> <br>
@@ -86,7 +90,9 @@
                     </div>
                 </div>
                 <div class="form-block" class="form-file-selection">
-                    <h3 class="form-block-name">Файл для анализа: </h3>
+                    <div class="form-block-name">
+                        <h3 class="form-block-text">Файл для анализа: </h3>
+                    </div>
                     <div class="form-file-input-wrapper">
                         <form class="form-file-upload" action="/upload" method="post" enctype="multipart/form-data">
                             <label for="file-input">Выберите файл c JSON выгрузкой:</label>
@@ -95,14 +101,13 @@
                             </div>
                         </form>
                     </div>
-                </div>
-                <div class="form-block" class="form-start-script" id="form-start-script-block">
-                    <h3 class="form-block-name">Запустить программу: </h3>
                     <button id="start-script-button" class="form-button"
                         class="form-start-script-button">Запустить</button>
                 </div>
                 <div class="form-block" class="form-block-result" id="form-block-result">
-                    <h3 class="form-block-name">Результат работы: </h3>
+                    <div class="form-block-name">
+                        <h3 class="form-block-text">Результат работы: </h3>
+                    </div>
                 </div>
             </div>
         </div>

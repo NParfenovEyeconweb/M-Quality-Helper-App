@@ -84,17 +84,39 @@ body {
 
 /* form styles */
 
+.form-header {
+  width: fit-content;
+  background-color: black;
+  color: white;
+  border-radius: 12px;
+  padding: 0.3em 0.75em;
+  margin: 5px 10px;
+}
+
 .form-block {
-  background-color: #aa98fa;
+  background-color: #C5C5C5;
   border-radius: 12px;
   margin: 5px 10px;
-  padding: 7px 12px;
+  padding: 0px 12px 7px 0px;
+}
+
+.form-block div:not(:first-child) {
+  padding-left: 14px;
 }
 
 .form-button {
   padding: 5px 10px;
-  border-radius: 5px;
+  border-radius: 10px;
   font-weight: bold;
+}
+
+.form-block-name {
+  width: fit-content;
+  background-color: black;
+  color: white;
+  padding: 0.3em 0.75em;
+  margin-bottom: 0.3em;
+  border-radius: 16px;
 }
 
 .form-block-description {
@@ -142,7 +164,7 @@ body {
 }
 
 #outputTable th {
-  background-color:  #2dbd2d;
+  background-color:  #00a6ff;
   color: white;
   text-align: left;
   padding: 12px 15px;
@@ -165,4 +187,44 @@ body {
   background-color: black;
   color: white;
   padding: 5px 10px;
+}
+
+/* buttons */
+
+button {
+  border: none;
+  color: #fff;
+  background-image: linear-gradient(30deg, #00a6ff, #4df0af);
+  border-radius: 20px;
+  background-size: 100% auto;
+  font-family: inherit;
+  font-size: 14px;
+  padding: 0.6em 1.5em;
+ }
+
+button:hover {
+  background-position: right center;
+  background-size: 200% auto;
+  -webkit-animation: pulse 2s infinite;
+  animation: pulse512 1.5s infinite;
+}
+
+@keyframes pulse512 {
+  0% {
+   box-shadow: 0 0 0 0 #05d3da66;
+  }
+ 
+  70% {
+   box-shadow: 0 0 0 10px rgb(218 103 68 / 0%);
+  }
+ 
+  100% {
+   box-shadow: 0 0 0 0 rgb(218 103 68 / 0%);
+  }
+ }
+
+#start-script-button {
+  margin-top: 8px;
+  margin-left: 14px;
+  font-size: 16px;
 }
