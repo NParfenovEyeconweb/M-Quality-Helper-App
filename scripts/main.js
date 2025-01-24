@@ -137,6 +137,20 @@ deleteMessageButton.addEventListener("click", () => {
   lastInput.remove();
 });
 
+/* file selection handling */
+
+const fileInput = document.getElementById('file-input');
+const fileNameDisplay = document.getElementById('file-name');
+
+fileInput.addEventListener('change', (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    fileNameDisplay.textContent = file.name;
+  } else {
+    fileNameDisplay.textContent = 'Not selected file';
+  }
+});
+
 /*
 function that returns an input type="text" element 
 with specified name and placeholder values
