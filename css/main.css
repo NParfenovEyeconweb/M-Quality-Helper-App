@@ -84,19 +84,26 @@ body {
 
 /* form styles */
 
+.main-form {
+  width: 100%;
+  display:flex;
+  flex-flow: wrap column;
+  justify-content: center;
+}
+
 .form-header {
   width: fit-content;
   background-color: black;
   color: white;
   border-radius: 12px;
   padding: 0.3em 0.75em;
-  margin: 5px 10px;
+  margin: 4px 15px;
 }
 
 .form-block {
   background-color: #C5C5C5;
   border-radius: 12px;
-  margin: 5px 10px;
+  margin: 4px 15px;
   padding: 0px 12px 7px 0px;
 }
 
