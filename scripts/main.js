@@ -147,7 +147,7 @@ fileInput.addEventListener('change', (event) => {
   if (file) {
     fileNameDisplay.textContent = file.name;
   } else {
-    fileNameDisplay.textContent = 'Not selected file';
+    fileNameDisplay.textContent = 'Файл не выбран';
   }
 });
 
