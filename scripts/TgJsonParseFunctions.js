@@ -27,3 +27,18 @@ function getDate (message) {
     return new Date(message.date);
 }
 
+/* returns false or an array of people who used this reaction on a message */
+
+function isReactionFound (message, emoji) {
+    let reactionsArray = message.reactions;
+    let reactionsFrom = [];
+    for (const reaction of reactionsArray) {
+        if (reaction.emoji === emoji) {
+            for (const recent of reaction.recent) {
+                reactionsFrom.push(recent.from);
+            }
+            return reactionsFrom;
+        }
+    }
+    return false;
+}
