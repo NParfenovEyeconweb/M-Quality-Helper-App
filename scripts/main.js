@@ -68,7 +68,7 @@ startScriptButton.addEventListener("click", () => {
         const resultTableHtml = mapToHTMLTable(resultMap, tableId);
         console.log(resultTableHtml);
     
-        const resultBlock = document.getElementById("form-block-result");
+        const resultBlock = document.getElementById("outputTable-block");
         const existingTable = document.getElementById(tableId); 
     
         if (existingTable) {
