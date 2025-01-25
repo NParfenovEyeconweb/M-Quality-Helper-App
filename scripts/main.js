@@ -67,12 +67,12 @@ startScriptButton.addEventListener("click", () => {
         const tableId = "outputTable";
         const resultTableHtml = mapToHTMLTable(resultMap, tableId);
         console.log(resultTableHtml);
-    
-        const resultBlock = document.getElementById("form-block-result");
-        const existingTable = document.getElementById(tableId); 
-    
+
+        const resultBlock = document.getElementById("outputTable-block");
+        const existingTable = document.getElementById(tableId);
+
         if (existingTable) {
-          existingTable.remove()
+          existingTable.remove();
           console.log("Existing table removed");
         }
 
@@ -81,8 +81,6 @@ startScriptButton.addEventListener("click", () => {
       .catch((error) => {
         console.log("Promise error", error);
       });
-
-
   }
 
   /* needed function is called with a file as an argument */
@@ -158,54 +156,55 @@ using json exported telegram chat
 */
 
 function countMessages(file, targetMessages, startDate, endDate) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-  
-      reader.onload = (event) => {
-        try {
-          const jsonData = JSON.parse(event.target.result);
-          const usersMap = new Map();
-  
-          const messages = jsonData.messages;
-  
-          for (const message of messages) {
-            const messageText = extractText(message).trim();
-            const messageAuthor = getAuthor(message).name;
-            const messageDate = getDate(message);
-  
-            if (messageDate > startDate && messageDate < endDate) {
-              for (const targetMessage of targetMessages) {
-                if (messageText === targetMessage) {
-                  if (!usersMap.has(messageAuthor)) {
-                    usersMap.set(messageAuthor, 0);
-                  }
-                  usersMap.set(messageAuthor, usersMap.get(messageAuthor) + 1);
-                  break;
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      try {
+        const jsonData = JSON.parse(event.target.result);
+        const usersMap = new Map();
+
+        const messages = jsonData.messages;
+
+        for (const message of messages) {
+          const messageText = extractText(message).trim();
+          const messageAuthor = getAuthor(message).name;
+          const messageDate = getDate(message);
+
+          if (messageDate > startDate && messageDate < endDate) {
+            for (const targetMessage of targetMessages) {
+              if (messageText === targetMessage) {
+                if (!usersMap.has(messageAuthor)) {
+                  usersMap.set(messageAuthor, 0);
                 }
+                usersMap.set(messageAuthor, usersMap.get(messageAuthor) + 1);
+                break;
               }
             }
           }
-  
-          resolve(usersMap);
-        } catch (error) {
-          reject('Error parsing JSON');
         }
-      };
-  
-      reader.onerror = () => reject('Error reading file');
-      reader.readAsText(file);
+
+        resolve(usersMap);
+      } catch (error) {
+        reject("Error parsing JSON");
+      }
+    };
+
+    reader.onerror = () => reject("Error reading file");
+    reader.readAsText(file);
   });
 }
 
-function mapToHTMLTable(map, tableId = 'mapTable') {
+function mapToHTMLTable(map, tableId = "mapTable") {
   let html = `<table id="${tableId}" border="1" style="border-collapse: collapse; width: 100%;">`;
-  html += '<thead><tr><th>Пользователь</th><th>Кол-во сообщений</th></tr></thead>';
-  html += '<tbody>';
+  html +=
+    "<thead><tr><th>Пользователь</th><th>Кол-во сообщений</th></tr></thead>";
+  html += "<tbody>";
 
   map.forEach((value, key, map) => {
     html += `<tr><td>${key}</td><td>${value}</td></tr>`;
   });
 
-  html += '</tbody></table>';
+  html += "</tbody></table>";
   return html;
 }
