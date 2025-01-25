@@ -1,16 +1,27 @@
 const startScriptButton = document.getElementById("start-script-button");
 
+const selectElement = document.getElementById("script-select");
+const searchTypeFormBlock = document.getElementById("form-search-type");
+
 startScriptButton.addEventListener("click", () => {
   console.log("startScriptButton clicked");
 
   const inputWrapper = document.getElementById("message-input-wrapper");
 
   let targetMessages = [];
-  for (const inputMessage of inputWrapper.children) {
-    if (inputMessage.value === "") continue;
-    targetMessages.push(inputMessage.value);
+  let targetReactions = [];
+  if (selectElement.value === "count-messages") {
+    for (const inputMessage of inputWrapper.children) {
+      if (inputMessage.value === "") continue;
+      targetMessages.push(inputMessage.value);
+    }
+    console.log(`targetMessages succesfully retrieved: ${targetMessages}`);
+  } else if (selectElement.value === "count-reactions") {
+    for (const inputReaction of inputWrapper.children) {
+      if (inputReaction.value === "") continue;
+      targetReactions.push(inputReaction.value);
+    }
   }
-  console.log(`targetMessages succesfully retrieved: ${targetMessages}`);
 
   const scriptTypeElement = document.getElementById("script-name");
   const scriptTypeValue = scriptTypeElement.textContent;
@@ -60,7 +71,7 @@ startScriptButton.addEventListener("click", () => {
     return;
   }
 
-  if (scriptTypeValue === "Подсчет сообщений") {
+  if (selectElement.value === "count-messages") {
     console.log(`script type: ${scriptTypeValue}`);
     countMessages(file, targetMessages, startDate, endDate)
       .then((resultMap) => {
@@ -133,6 +144,62 @@ deleteMessageButton.addEventListener("click", () => {
 
   const lastInput = inputWrapper.lastElementChild;
   lastInput.remove();
+});
+
+/* code for select menu */
+
+selectElement.addEventListener("change", (event) => {
+  const selectedValue = event.target.value;
+  searchTypeFormBlock.innerHTML = "";
+  console.log(selectedValue);
+
+  if (selectedValue === "count-messages") {
+    searchTypeFormBlock.innerHTML = `
+      <div class="form-block-name">
+        <h3 class="form-block-text">Сообщения для подсчета:</h3>
+      </div>
+      <div class="form-block-description">
+        Сообщения для подсчета необходимо вводить полностью! <br>Например,
+        для подсчета сообщений "завершено" нужно ввести это слово полностью. <br>
+        Сообщения "завершено!" или "завершено, спасибо!" при этом в подсчете
+        участвовать не будут.
+      </div>
+      <div id="message-input-wrapper" class="form-message-input-wrapper">
+        <input class="form-input" type="text" name="message-text" placeholder="Введите сообщение">
+      </div>
+      <div class="form-message-button-wrapper">
+        <button id="add-message-button" class="form-button" type="button">+</button>
+        <button id="delete-message-button" class="form-button" type="button">-</button>
+      </div>
+    `;
+  } else if (selectedValue === "count-reactions") {
+    searchTypeFormBlock.innerHTML = `
+      <div class="form-block-name">
+        <h3 class="form-block-text">Реакции для подсчета:</h3>
+      </div>
+      <div id="message-input-wrapper" class="form-message-input-wrapper">
+        <input class="form-input" type="text" name="message-text" placeholder="Введите сообщение">
+      </div>
+      <div class="form-message-button-wrapper">
+        <button id="add-message-button" class="form-button" type="button">+</button>
+        <button id="delete-message-button" class="form-button" type="button">-</button>
+      </div>
+    `;
+  }
+});
+
+/* file selection handling */
+
+const fileInput = document.getElementById("file-input");
+const fileNameDisplay = document.getElementById("file-name");
+
+fileInput.addEventListener("change", (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    fileNameDisplay.textContent = file.name;
+  } else {
+    fileNameDisplay.textContent = "Файл не выбран";
+  }
 });
 
 /*
