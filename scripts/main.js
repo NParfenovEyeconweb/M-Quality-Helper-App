@@ -92,6 +92,25 @@ startScriptButton.addEventListener("click", () => {
       .catch((error) => {
         console.log("Promise error", error);
       });
+  } else if (selectElement.value === "count-reactions") {
+    countReactions(file, targetReactions, startDate, endDate)
+      .then((resultMap) => {
+        const tableId = "outputTable";
+        const resultTableHtml = mapToHTMLTable(resultMap, tableId);
+        console.log(resultTableHtml);
+        const resultBlock = document.getElementById("outputTable-block");
+        const existingTable = document.getElementById(tableId);
+
+        if (existingTable) {
+          existingTable.remove();
+          console.log("Existing table removed");
+        }
+
+        resultBlock.innerHTML += resultTableHtml;
+      })
+      .catch((error) => {
+        console.log("Promise error", error);
+      });
   }
 
   /* needed function is called with a file as an argument */
@@ -150,41 +169,25 @@ deleteMessageButton.addEventListener("click", () => {
 
 selectElement.addEventListener("change", (event) => {
   const selectedValue = event.target.value;
-  searchTypeFormBlock.innerHTML = "";
-  console.log(selectedValue);
+  const taskNameElement = document.getElementById("form-task-name");
+  const taskDescriptionElement = document.getElementById(
+    "form-task-description"
+  );
 
   if (selectedValue === "count-messages") {
-    searchTypeFormBlock.innerHTML = `
-      <div class="form-block-name">
-        <h3 class="form-block-text">Сообщения для подсчета:</h3>
-      </div>
-      <div class="form-block-description">
-        Сообщения для подсчета необходимо вводить полностью! <br>Например,
-        для подсчета сообщений "завершено" нужно ввести это слово полностью. <br>
-        Сообщения "завершено!" или "завершено, спасибо!" при этом в подсчете
-        участвовать не будут.
-      </div>
-      <div id="message-input-wrapper" class="form-message-input-wrapper">
-        <input class="form-input" type="text" name="message-text" placeholder="Введите сообщение">
-      </div>
-      <div class="form-message-button-wrapper">
-        <button id="add-message-button" class="form-button" type="button">+</button>
-        <button id="delete-message-button" class="form-button" type="button">-</button>
-      </div>
+    taskNameElement.innerHTML = `
+      <h3 class="form-block-text">Сообщения для подсчета:</h3>
     `;
+    taskDescriptionElement.innerHTML = `
+      Сообщения для подсчета необходимо вводить полностью! <br>Например,
+      для подсчета сообщений "завершено" нужно ввести это слово полностью. <br>
+      Сообщения "завершено!" или "завершено, спасибо!" при этом в подсчете
+      участвовать не будут.`;
   } else if (selectedValue === "count-reactions") {
-    searchTypeFormBlock.innerHTML = `
-      <div class="form-block-name">
-        <h3 class="form-block-text">Реакции для подсчета:</h3>
-      </div>
-      <div id="message-input-wrapper" class="form-message-input-wrapper">
-        <input class="form-input" type="text" name="message-text" placeholder="Введите сообщение">
-      </div>
-      <div class="form-message-button-wrapper">
-        <button id="add-message-button" class="form-button" type="button">+</button>
-        <button id="delete-message-button" class="form-button" type="button">-</button>
-      </div>
+    taskNameElement.innerHTML = `
+      <h3 class="form-block-text">Реакции для подсчета:</h3>
     `;
+    taskDescriptionElement.innerHTML = "";
   }
 });
 
@@ -274,4 +277,40 @@ function mapToHTMLTable(map, tableId = "mapTable") {
 
   html += "</tbody></table>";
   return html;
+}
+
+function countReactions(file, targetReactions, startDate, endDate) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const jsonData = JSON.parse(event.target.result);
+        const usersMap = new Map();
+        const messages = jsonData.messages;
+        for (const message of messages) {
+          const messageAuthor = getAuthor(message).name;
+          const messageDate = getDate(message);
+
+          if (messageDate > startDate && messageDate < endDate) {
+            for (const emoji of targetReactions) {
+              if (isReactionFound(message, emoji)) {
+                const authorsArray = isReactionFound(message, emoji);
+                for (const author of authorsArray) {
+                  if (!usersMap.has(author)) {
+                    usersMap.set(author, 0);
+                  }
+                  usersMap.set(author, usersMap.get(author) + 1);
+                }
+              }
+            }
+          }
+        }
+        resolve(usersMap);
+      } catch (error) {
+        reject("Error parsing JSON");
+      }
+    };
+    reader.onerror = () => reject("Error reading file");
+    reader.readAsText(file);
+  });
 }
