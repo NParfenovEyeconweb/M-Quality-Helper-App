@@ -2,30 +2,59 @@
 <html lang="en">
 
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Simple web application that helps with gathering
     stats on JSON exported telegram chats.">
     <meta name="author" content="Nikita Parfenov">
     <title>MQuality Helper App</title>
+
     <link rel="stylesheet" href="css/main.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
+
 </head>
 
 <body>
     <header class="main-header">
         <div class="leftH">
-            <img class="app-logo" src="resources/logo.png" alt="App logo">
+            <div class="app-logo-container">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="100" height="100">
+                    <defs>
+                        <filter id="shadow">
+                            <feDropShadow dx="2" dy="2" stdDeviation="2" flood-opacity="0.2" />
+                        </filter>
+                    </defs>
+
+                    <!-- Background circle -->
+                    <circle cx="32" cy="32" r="28" fill="#4CAF50" filter="url(#shadow)"
+                        style="stroke: #ffffff; stroke-width: 2" />
+
+                    <!-- Checkmark -->
+                    <path fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"
+                        d="M18 32.5l8 8 16-16" style="transform-origin: center; transform: rotate(2deg)" />
+
+                    <!-- Integrated Text -->
+                    <text x="1" y="43" font-family="Roboto, Arial, sans-serif" font-weight="800" font-size="10"
+                        fill="white" text-anchor="middle" style="transform: rotate(-45deg)" filter="url(#text-glow)"
+                        letter-spacing="0px">
+                        MQ
+                    </text>
+                    <text x="0" y="56" font-family="Roboto, Arial, sans-serif" font-weight="800" font-size="8"
+                        fill="white" text-anchor="middle" style="transform: rotate(-45deg)" filter="url(#text-glow)"
+                        letter-spacing="0px">
+                        helper
+                    </text>
+                </svg>
+            </div>
             <div class="app-name">
                 <div class="company-name-svg-wrapper">
                     <object class="company-name-svg" data="resources/main_logo_PP.svg" type="image/svg+xml"></object>
                 </div>
                 <h1 class="app-name-text">M-Quality Helper App</h1>
             </div>
-
         </div>
         <div class="rightH">
             <div class="main-header-button-wrapper">
@@ -131,12 +160,13 @@
                 Сообщения "завершено!" или "завершено, спасибо!" при этом в подсчете
                 участвовать не будут.
             </div>
-            <div id="message-input-wrapper" class="form-message-input-wrapper">
-                <input class="form-input" type="text" name="message-text" placeholder="Введите сообщение">
-            </div>
-            <div class="form-message-button-wrapper">
+            <div class="message-input-button-wrapper">
                 <button id="add-message-button" class="form-button" type="button">+</button>
                 <button id="delete-message-button" class="form-button" type="button">-</button>
+            </div>
+            <div id="message-input-wrapper" class="form-message-input-wrapper">
+
+                <input class="form-input" type="text" name="message-text" placeholder="Введите сообщение">
             </div>
         </div>
         <div class="form-block" class="form-block-result" id="form-block-result">
