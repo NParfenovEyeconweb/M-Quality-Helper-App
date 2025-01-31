@@ -173,8 +173,10 @@ selectElement.addEventListener("change", (event) => {
   const taskDescriptionElement = document.getElementById(
     "form-task-description"
   );
+  const scriptNameElement = document.getElementById("script-name");
 
   if (selectedValue === "count-messages") {
+    scriptNameElement.innerHTML = `Подсчет сообщений`;
     taskNameElement.innerHTML = `
       <h3 class="form-block-text">Сообщения для подсчета:</h3>
     `;
@@ -184,6 +186,7 @@ selectElement.addEventListener("change", (event) => {
       Сообщения "завершено!" или "завершено, спасибо!" при этом в подсчете
       участвовать не будут.`;
   } else if (selectedValue === "count-reactions") {
+    scriptNameElement.innerHTML = `Подсчет реакций`;
     taskNameElement.innerHTML = `
       <h3 class="form-block-text">Реакции для подсчета:</h3>
     `;

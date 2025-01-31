@@ -1,3 +1,7 @@
+class TgJsonMessageParser {
+  constructor() {}
+}
+
 function extractText(message) {
   const textEntities = message.text;
   let resultString = "";
