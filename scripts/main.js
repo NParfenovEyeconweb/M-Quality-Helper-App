@@ -71,11 +71,14 @@ startScriptButton.addEventListener("click", () => {
     return;
   }
 
+  const tableId = "outputTable";
+  const copyTableButtonId = "copyTable-btn";
+
   if (selectElement.value === "count-messages") {
     console.log(`script type: ${scriptTypeValue}`);
     countMessages(file, targetMessages, startDate, endDate)
       .then((resultMap) => {
-        const tableId = "outputTable";
+        
         const resultTableHtml = mapToHTMLTable(resultMap, tableId);
         console.log(resultTableHtml);
 
@@ -88,6 +91,17 @@ startScriptButton.addEventListener("click", () => {
         }
 
         resultBlock.innerHTML += resultTableHtml;
+
+        const existingButton = document.getElementById(copyTableButtonId);
+        if (existingButton) {
+          existingButton.remove();
+          console.log("Existing button removed");
+        }
+
+        const copyTableButton = createTableCopyButton(tableId, copyTableButtonId);
+        const copyButtonParentId = "tableCopyBtn-block";
+        const copyButtonParent = document.getElementById(copyButtonParentId);
+        copyButtonParent.appendChild(copyTableButton);
       })
       .catch((error) => {
         console.log("Promise error", error);
@@ -95,7 +109,6 @@ startScriptButton.addEventListener("click", () => {
   } else if (selectElement.value === "count-reactions") {
     countReactions(file, targetReactions, startDate, endDate)
       .then((resultMap) => {
-        const tableId = "outputTable";
         const resultTableHtml = mapToHTMLTable(resultMap, tableId);
         console.log(resultTableHtml);
         const resultBlock = document.getElementById("outputTable-block");
@@ -107,6 +120,17 @@ startScriptButton.addEventListener("click", () => {
         }
 
         resultBlock.innerHTML += resultTableHtml;
+
+        const existingButton = document.getElementById(copyTableButtonId);
+        if (existingButton) {
+          existingButton.remove();
+          console.log("Existing button removed");
+        }
+
+        const copyTableButton = createTableCopyButton(tableId, copyTableButtonId);
+        const copyButtonParentId = "tableCopyBtn-block";
+        const copyButtonParent = document.getElementById(copyButtonParentId);
+        copyButtonParent.appendChild(copyTableButton);
       })
       .catch((error) => {
         console.log("Promise error", error);
@@ -316,4 +340,73 @@ function countReactions(file, targetReactions, startDate, endDate) {
     reader.onerror = () => reject("Error reading file");
     reader.readAsText(file);
   });
+}
+
+/**
+ * Creates a button that copies specified table to the clipboard.
+ * @param {string} tableId - id of the table which the button should copy
+ * @param {string} copyTableButtonId - id that will be used for this button
+ * @returns 
+ */
+
+// Function to add a copy button to a table and handle copying its contents
+function createTableCopyButton(tableId, copyTableButtonId) {
+  // Get the target table
+  const table = document.getElementById(tableId);
+  if (!table) {
+      console.error(`Table with id "${tableId}" not found`);
+      return;
+  }
+
+  // Create the copy button
+  const copyButton = document.createElement('button');
+  copyButton.textContent = 'Скопировать таблицу';
+  copyButton.className = copyTableButtonId;
+  
+  copyButton.style.cursor = 'pointer';
+
+  // Function to convert table data to a clean string
+  function tableToString(table) {
+      // Get all rows including header
+      const rows = Array.from(table.rows);
+      
+      // Convert each row to text
+      return rows.map(row => {
+          // Get all cells in this row
+          const cells = Array.from(row.cells);
+          // Convert cells to text and join with tabs
+          return cells.map(cell => cell.textContent.trim()).join('\t');
+      }).join('\n'); // Join rows with newlines
+  }
+
+  // Add click handler
+  copyButton.addEventListener('click', async () => {
+      try {
+          // Convert table to string
+          const tableText = tableToString(table);
+          
+          // Copy to clipboard using the modern Clipboard API
+          await navigator.clipboard.writeText(tableText);
+          
+          // Provide user feedback
+          const originalText = copyButton.textContent;
+          copyButton.textContent = 'Скопировано!';
+          
+          // Reset button text after 2 seconds
+          setTimeout(() => {
+              copyButton.textContent = originalText;
+          }, 2000);
+          
+      } catch (err) {
+          console.error('Failed to copy table:', err);
+          copyButton.textContent = 'Не удалось скопировать!';
+          
+          // Reset button text after 2 seconds
+          setTimeout(() => {
+              copyButton.textContent = 'Скопировать таблицу';
+          }, 2000);
+      }
+  });
+
+  return copyButton;
 }

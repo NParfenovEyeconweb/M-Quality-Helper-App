@@ -97,14 +97,14 @@ body {
   width: fit-content;
   background-color: black;
   color: white;
-  border-radius: 12px;
+  border-radius: 10px;
   padding: 0.3em 0.75em;
   margin: 4px 15px;
 }
 
 .form-block {
   background-color: white;
-  border-radius: 12px;
+  border-radius: 14px;
   margin: 4px 15px;
   padding: 0px 12px 7px 0px;
 }
