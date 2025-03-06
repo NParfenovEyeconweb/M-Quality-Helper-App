@@ -95,8 +95,8 @@ body {
 
 .form-header {
   width: fit-content;
-  background-color: black;
-  color: white;
+  background-color: white;
+  color: black;
   border-radius: 12px;
   padding: 0.3em 0.75em;
   margin: 4px 15px;
@@ -104,7 +104,7 @@ body {
 
 .form-block {
   background-color: white;
-  border-radius: 12px;
+  border-radius: 20px;
   margin: 4px 15px;
   padding: 0px 12px 7px 0px;
 }
@@ -129,8 +129,8 @@ body {
 
 .form-block-name {
   width: fit-content;
-  background-color: black;
-  color: white;
+  background-color: rgb(255, 255, 255);
+  color: rgb(44, 46, 48);
   padding: 0.3em 0.75em;
   margin-bottom: 0.3em;
   border-radius: 16px;
