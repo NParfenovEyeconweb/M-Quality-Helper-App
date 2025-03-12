@@ -277,6 +277,7 @@ body {
 #outputTable {
   border: none;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 7px;
   margin-bottom: 10px;
 }
 

@@ -5,13 +5,12 @@
   const searchTypeFormBlock = document.getElementById("form-search-type");
 
   startScriptButton.addEventListener("click", () => {
-    console.log("startScriptButton clicked");
 
     const inputWrapper = document.getElementById("message-input-wrapper");
 
     let targetMessages = [];
     let targetReactions = [];
-    if (selectElement.value === "count-messages") {
+    if (selectElement.value === "count-messages" || selectElement.value === "count-by-timespan") {
       for (const inputMessage of inputWrapper.children) {
         if (inputMessage.value === "") continue;
         targetMessages.push(inputMessage.value);
@@ -29,11 +28,9 @@
 
     const startDateInput = document.getElementById("start-date-input");
     const startDateValue = startDateInput.value.trim();
-    console.log(`startDateValue = ${startDateValue}`);
 
     const endDateInput = document.getElementById("end-date-input");
     const endDateValue = endDateInput.value.trim();
-    console.log(`endDateValue = ${endDateValue}`);
 
     const fileInput = document.getElementById("file-input");
     const files = fileInput.files;
@@ -82,8 +79,7 @@
       countMessages(file, targetMessages, startDate, endDate)
         .then((resultMap) => {
 
-          const resultTableHtml = mapToHTMLTable(resultMap, tableId);
-          console.log(resultTableHtml);
+          const resultTableHtml = mapToHTMLTable(resultMap, tableId, "Сотрудник", "Количество");
 
           const resultBlock = document.getElementById("outputTable-block");
           const existingTable = document.getElementById(tableId);
@@ -106,8 +102,7 @@
     } else if (selectElement.value === "count-reactions") {
       countReactions(file, targetReactions, startDate, endDate)
         .then((resultMap) => {
-          const resultTableHtml = mapToHTMLTable(resultMap, tableId);
-          console.log(resultTableHtml);
+          const resultTableHtml = mapToHTMLTable(resultMap, tableId, "Сотрудник", "Количество");
           const resultBlock = document.getElementById("outputTable-block");
           const existingTable = document.getElementById(tableId);
 
@@ -131,8 +126,9 @@
       countMessagesByTimespan(file, targetMessages, startDate, endDate)
         .then((resultMap) => {
 
-          const resultTableHtml = mapToHTMLTable(resultMap, tableId);
-          console.log(resultTableHtml);
+          console.log(resultMap);
+
+          const resultTableHtml = mapToHTMLTable(resultMap, tableId, "Период", "Количество");
 
           const resultBlock = document.getElementById("outputTable-block");
           const existingTable = document.getElementById(tableId);
@@ -243,8 +239,9 @@
       Сообщения для подсчета необходимо вводить полностью! <br>Например,
       для подсчета сообщений "завершено" нужно ввести это слово полностью. <br>
       Сообщения "завершено!" или "завершено, спасибо!" при этом в подсчете
-      участвовать не будут. Время округляется до 08:00 либо 20:00`;
-
+      участвовать не будут. <br> 
+      Время округляется до 08:00 либо 20:00. (Время с 08:00 и до 19:59 округляется до 08:00,
+      время с 20:00 и до 07:59 округляется до 20:00) <br>`;
     }
   });
 
@@ -322,10 +319,10 @@
     });
   }
 
-  function mapToHTMLTable(map, tableId = "mapTable") {
+  function mapToHTMLTable(map, tableId = "mapTable", keyHeader = "Key", valueHeader = "Value") {
     let html = `<table id="${tableId}" border="1" style="border-collapse: collapse; width: 100%;">`;
     html +=
-      "<thead><tr><th>Пользователь</th><th>Кол-во сообщений</th></tr></thead>";
+      `<thead><tr><th>${keyHeader}</th><th>${valueHeader}</th></tr></thead>`;
     html += "<tbody>";
 
     map.forEach((value, key, map) => {
@@ -388,10 +385,10 @@
             const messageText = extractText(message).trim();
             const messageDate = getDate(message);
 
-            if (messageDate > startDate && messageDate < endDate) {
+            if (messageDate >= startDate && messageDate <= endDate) {
               for (const targetMessage of targetMessages) {
                 if (messageText === targetMessage) {
-                  const messageDateKey = roundToTime(messageDate).toISOString();
+                  let messageDateKey = roundToTime(messageDate).toLocaleString();
                   if (!timespanMap.has(messageDateKey)) {
                     timespanMap.set(messageDateKey, 0);
                   }
@@ -421,18 +418,18 @@
     // Create a new date object to avoid modifying the original date
     const roundedDate = new Date(date);
   
-    // If the time is before 08:00, round to 08:00
-    if (hours < 8 || (hours === 8 && minutes === 0 && seconds === 0 && milliseconds === 0)) {
-      roundedDate.setHours(8, 0, 0, 0);
+    // If the time is before 08:00, round down to 20:00 of the previous day
+    if (hours < 8) {
+      roundedDate.setDate(roundedDate.getDate() - 1);
+      roundedDate.setHours(20, 0, 0);
     } 
     // If the time is between 08:00 and 20:00, round down to 08:00
     else if (hours < 20) {
-      roundedDate.setHours(8, 0, 0, 0);
+      roundedDate.setHours(8, 0, 0);
     } 
-    // If the time is after 20:00, round to 08:00 of the next day
+    // If the time is after 20:00, round down to 20:00
     else {
-      roundedDate.setDate(roundedDate.getDate() + 1);
-      roundedDate.setHours(8, 0, 0, 0);
+      roundedDate.setHours(20, 0, 0);
     }
   
     return roundedDate;
