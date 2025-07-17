@@ -1,4 +1,67 @@
 (function () {
+
+  /*
+  const exampleMessage = {
+   "id": 665570,
+   "type": "message",
+   "date": "2025-07-01T00:17:31",
+   "date_unixtime": "1751314651",
+   "edited": "2025-07-01T00:21:19",
+   "edited_unixtime": "1751314879",
+   "from": "Katerina",
+   "from_id": "user7808858737",
+   "photo": "(File not included. Change data exporting settings to download.)",
+   "photo_file_size": 51782,
+   "width": 746,
+   "height": 1280,
+   "text": [
+    {
+     "type": "phone",
+     "text": "466673561"
+    },
+    " 5681 Просьба рассмотреть вне очереди ",
+    {
+     "type": "mention",
+     "text": "@booogus"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "phone",
+     "text": "466673561"
+    },
+    {
+     "type": "plain",
+     "text": " 5681 Просьба рассмотреть вне очереди "
+    },
+    {
+     "type": "mention",
+     "text": "@booogus"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ],
+   "reactions": [
+     {
+      "type": "emoji",
+      "count": 1,
+      "emoji": "👀",
+      "recent": [
+       {
+        "from": "Ринат Макаров",
+        "from_id": "user6831089489",
+        "date": "2025-07-01T00:21:19"
+       }
+      ]
+     }
+    ]
+  };
+  console.log(isReactionFound(exampleMessage, "👀"));
+  */
+
   const startScriptButton = document.getElementById("start-script-button");
 
   const selectElement = document.getElementById("script-select");
@@ -342,7 +405,6 @@
           const usersMap = new Map();
           const messages = jsonData.messages;
           for (const message of messages) {
-            const messageAuthor = getAuthor(message).name;
             const messageDate = getDate(message);
 
             if (messageDate > startDate && messageDate < endDate) {

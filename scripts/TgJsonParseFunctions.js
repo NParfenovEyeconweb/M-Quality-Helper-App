@@ -40,6 +40,8 @@ function isReactionFound(message, emoji) {
   for (const reaction of reactionsArray) {
     if (!reaction.emoji) return false;
     if (reaction.emoji === emoji) {
+      if (!reaction.recent) return false;
+      if (!Array.isArray(reaction.recent)) return false;
       for (const recent of reaction.recent) {
         reactionsFrom.push(recent.from);
       }
